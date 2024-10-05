@@ -1,12 +1,12 @@
 'use client'
 import { useState, useRef } from 'react';
 import { Toast } from 'primereact/toast';
-// import  {ProgressSpinner}  from 'primereact/progressspinner';
+import Spinner from "../components/Spinner";
 
 const Login = () => {
     const [usuario, setUsuario] = useState('');
     const [password, setPassword] = useState('');
-    const [, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [, setSuccess] = useState(false);
     const toast = useRef(null);
 
@@ -62,29 +62,9 @@ const Login = () => {
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <Toast ref={toast} />
 
-                    {/* {loading &&
-                        // <div className='mt-1'><Spinner /></div>
-
-
-                        <div
-                            style={{
-                                position: 'fixed',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
-                                zIndex: 9999, // Superponer al contenido
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                overflow: 'hidden'
-                            }}
-                        >
-                            <ProgressSpinner style={{ width: 'l50px', height: '150px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />
-                        </div>
-
-                    } */}
+                    {loading &&
+                        <div className='mt-1'><Spinner /></div>
+                    }
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Ingresa tus credenciales
                     </h1>
@@ -103,7 +83,7 @@ const Login = () => {
                             </div>
                             <input type="password" name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)} />
                         </div>
-                        <button type="submit" className="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Ingresar_test</button>
+                        <button type="submit" className="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Ingresar</button>
                     </form>
                 </div>
             </div>
