@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Toast } from 'primereact/toast';
 import Spinner from "../components/Spinner";
@@ -10,6 +10,7 @@ const Header = () => {
     const [logoEmp, setLogoEmp] = useState(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const toast = useRef(null);
     const path_img = 'https://bekaert.grupo-citi.com/';
 
     useEffect(() => {
@@ -63,14 +64,26 @@ const Header = () => {
             }
         } catch (error) {
             console.log("Error en el servicio " + error);
+            showError(`Error en el servicio.`);
             //window.location.href = "/";
+        }finally{
+            setLoading(false);
         }
     };
 
+    /**
+ * usamos Toast de primereact para mostrar los mensaje de error
+ * @param {*} texto 
+ */
+    const showError = (texto) => {
+        if (toast.current)
+            toast.current.show({ severity: 'error', summary: 'Error', detail: `${texto}`, life: 3000 });
+    }
     return (
         <header className="bg-white border border-gray-800 rounded-lg shadow-lg">
             {/* <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8"> */}
             <div>
+                <Toast ref={toast} />
                 {loading &&
                     <div className='mt-1'><Spinner /></div>
 
