@@ -32,13 +32,13 @@ const Login = () => {
 
             if (response.ok) {
                 setSuccess(true);
-                console.log('Login exitoso:', data);
+                //console.log('Login exitoso:', data);
                 localStorage.setItem('token', data.token);
-                console.log('token ' + data.token);
+                //console.log('token ' + data.token);
                 //window.location.href = '/monitor'
                 router.push('/monitor');
             } else {
-                console.log(1);
+                //console.log(1);
                 showError(data.message)
             }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

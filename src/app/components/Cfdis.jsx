@@ -301,7 +301,6 @@ const Facturas = () => {
      * Exportar a csv
      */
     const exportCSV = () => {
-        console.log('exportar');
         setLoading(true);
         setTimeout(() => {
             dt.current.exportCSV();
