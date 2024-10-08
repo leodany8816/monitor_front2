@@ -31,16 +31,12 @@ const Header = () => {
             let data = await res.json();
             //console.log(data);
             if (data.exito) {
-                console.table(data);
                 setNameEmp(data.nombre);
                 setLogoEmp(data.logo);
-            } else {
-                console.log("no hay informacion");
             }
         } catch (error) {
-            console.log("Error en el servicio " + error);
+            showError("Error en el servicio " + error);
             router.push('/');
-            //window.location.href = "/";
         }
     }
 
@@ -57,15 +53,10 @@ const Header = () => {
                 },
             });
             const data = await res.json();
-            if (data.success) {
-                console.log("se cierra sesión");
+            if (data.success) 
                 router.push('/');
-                //window.location.href = "/";
-            }
         } catch (error) {
-            console.log("Error en el servicio " + error);
-            showError(`Error en el servicio.`);
-            //window.location.href = "/";
+            showError(`Error en el servicio: ${error}`);
         }finally{
             setLoading(false);
         }

@@ -19,6 +19,9 @@ const Facturas = () => {
     const [filteredCfdis, setFilteredCfdis] = useState([]); // Datos filtrados
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const fecha = new Date();
+    const fechaFile = `${fecha.getFullYear()}${fecha.getMonth()}${fecha.getDay()}_${fecha.getHours()}${fecha.getMinutes()}${fecha.getSeconds()}`; //Nombre del archivo CSV
+    const nameCsv = `CFDIS_${fechaFile}`;
     const path_img = 'https://bekaert.grupo-citi.com/img/pdf_icon.png';
     const toast = useRef(null);
 
@@ -63,7 +66,7 @@ const Facturas = () => {
             }
         };
         fetchCfdis();
-        
+
     }, []);
 
     // Función para aplicar el filtro de rango de fechas
@@ -76,14 +79,14 @@ const Facturas = () => {
                     const filteredData = cfdis.filter(cfdi => {
                         const cfdiDate = new Date(cfdi.fechaEmision.split('-').reverse().join('-')); // Convertir la fecha
                         // const cfdiDate = new Date(cfdi.fechaEmision); // Convertir la fecha
-                        console.log('fechas ' + cfdiDate);
+                        //console.log('fechas ' + cfdiDate);
                         return cfdiDate >= startDate && cfdiDate <= endDate;
 
                     });
                     setFilteredCfdis(filteredData);
                     setLoading(false);
                 } else {
-                    console.log('error');
+                    //console.log('error');
                     setLoading(false);
                     showError('Error: No se puede seleccionar una fecha inicial posterior a la final.');
                 }
@@ -212,10 +215,7 @@ const Facturas = () => {
                 let fileBase64 = data.file_base64;
                 downloadPdf(fileBase64, namePdf);
                 // abrirFilePdf(fileBase64);
-            } else {
-
             }
-
         } catch (err) {
             showError('Error en el servicio ' + err);
         } finally {
@@ -236,7 +236,7 @@ const Facturas = () => {
         const dataCfdis = mostrarFacturasSeleccionadas();
         setShowWarning(false);
         if (dataCfdis.length === 0) {
-            console.log('error 2')
+            //console.log('error 2')
             setLoading(false);
             showError("Error: Debes de seleccionar al menos una factura.");
             return;
@@ -298,6 +298,18 @@ const Facturas = () => {
     }
 
     /**
+     * Exportar a csv
+     */
+    const exportCSV = () => {
+        console.log('exportar');
+        setLoading(true);
+        setTimeout(() => {
+            dt.current.exportCSV();
+            setLoading(false);
+        }, 1000);
+    };
+
+    /**
  * usamos Toast de primereact para mostrar los mensaje de error
  * @param {*} texto 
  */
@@ -339,7 +351,8 @@ const Facturas = () => {
             <div className="flex align-items-center gap-3 mb-2 mt-2 p-4 md:grid-cols-1">
                 <button type="button" onClick={descargarZip} className="px-5 py-1.5 text-lg font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Descargar Zip</button>
 
-                <button type="button" onClick={() => dt.current.exportCSV({ filename: "Cfdis.csv" })} className="px-5 py-1.5 text-lg font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Exportar a Excel</button>
+                {/* <button type="button" onClick={() => dt.current.exportCSV()} disabled={loading} className="px-5 py-1.5 text-lg font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Exportar a Excel</button> */}
+                <button type="button" onClick={exportCSV} disabled={loading} className="px-5 py-1.5 text-lg font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Exportar a Excel</button>
             </div>
             <DataTable
                 value={filteredCfdis}
@@ -355,6 +368,7 @@ const Facturas = () => {
                 currentPageReportTemplate="{first} a {last} de {totalRecords}"
                 // className="w-full border border-red-700 rounded-lg shadow-lg"
                 selectionMode="single"
+                exportFilename={nameCsv}
 
             >
                 <Column
