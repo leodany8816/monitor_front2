@@ -242,7 +242,7 @@ const Facturas = () => {
         }
 
         // setShowWarning(false); // Ocultar la advertencia si hay selección
-        // console.log('son los que se van enviar');
+        // console.log('son los que se van enviar')
         // console.log(dataCfdis);
         try {
             // const res = await fetch("http://127.0.0.1:8000/api/downloadzip", {
