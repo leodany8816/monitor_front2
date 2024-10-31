@@ -14,7 +14,7 @@ const Facturas = () => {
     // const [selectedRows, setSelectedRows] = useState([]); // Almacenar filas seleccionadas
     const [selectedRows, setSelectedRows] = useState([]); // Filas seleccionadas
     const [first, setFirst] = useState(0); // Índice de la primera fila visible en la página actual
-    const [rowsPerPage, setRowsPerPage] = useState(10); // Cantidad de filas por página
+    const [rowsPerPage, setRowsPerPage] = useState(50); // Cantidad de filas por página
     const [, setShowWarning] = useState(false); // Para mostrar mensaje si no se seleccionan facturas
     const [filteredCfdis, setFilteredCfdis] = useState([]); // Datos filtrados
     const [startDate, setStartDate] = useState(null);
@@ -56,9 +56,11 @@ const Facturas = () => {
                     },
                 });
 
-                const data = await res.json();
-                setCfdis(data.cfdis);
-                setFilteredCfdis(data.cfdis);
+                if (res.json().length > 0) {
+                    const data = await res.json();
+                    setCfdis(data.cfdis);
+                    setFilteredCfdis(data.cfdis);
+                }
             } catch (err) {
                 showError('Error en la conexión: ' + err);
             } finally {
@@ -355,6 +357,7 @@ const Facturas = () => {
             </div>
             <DataTable
                 value={filteredCfdis}
+                emptyMessage="No hay datos disponibles"
                 ref={dt}
                 dataKey="id_factura"
                 paginator
@@ -362,9 +365,10 @@ const Facturas = () => {
                 first={first}
                 size="large"
                 onPage={handlePageChange}
-                rowsPerPageOptions={[10, 25, 50, 100, 200, 500]}
+                rowsPerPageOptions={[50, 100, 200, 500]}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="{first} a {last} de {totalRecords}"
+                paginatorPosition="both"
                 // className="w-full border border-red-700 rounded-lg shadow-lg"
                 selectionMode="single"
                 exportFilename={nameCsv}
