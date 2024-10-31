@@ -43,9 +43,6 @@ const Facturas = () => {
     useEffect(() => {
         const fetchCfdis = async () => {
             setLoading(true);
-            // setError(null);
-            // hideSpinner()
-
             try {
                 // const res = await fetch("http://127.0.0.1:8000/api/cfdi", {
                 const res = await fetch("https://apis.grupo-citi.com/api/cfdi", {
