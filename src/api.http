@@ -1,0 +1,38 @@
+###Login
+POST https://apis.grupo-citi.com/api/login
+Content-Type: application/json
+
+{
+    "usuario" : "POL710601K54",
+    "password": "POL710601K54"
+}
+
+###Encabezado
+POST https://apis.grupo-citi.com/api/encabezado
+Content-Type: application/json
+Authorization: Bearer 88|X3eaPrAgHJKSRtU1DQ23FRWoYK1o9xmgArj1rACce6ab85e1   
+
+###Consultar CFDIS
+POST https://apis.grupo-citi.com/api/cfdi
+Content-Type: application/json
+Authorization: Bearer 88|X3eaPrAgHJKSRtU1DQ23FRWoYK1o9xmgArj1rACce6ab85e1
+
+###Consultar ZIPS
+POST https://apis.grupo-citi.com/api/downloadzip
+Authorization: Bearer 88|X3eaPrAgHJKSRtU1DQ23FRWoYK1o9xmgArj1rACce6ab85e1
+
+{"cfdis": "113, 114"}
+
+###Consultar PDFS
+POST https://apis.grupo-citi.com/api/downloadpdf
+Content-Type: application/json
+Authorization: Bearer 88|X3eaPrAgHJKSRtU1DQ23FRWoYK1o9xmgArj1rACce6ab85e1
+
+{
+    "idFactura": "112"
+}
+
+###Logout
+POST https://apis.grupo-citi.com/api/logout
+Content-Type: application/json
+Authorization: Bearer 88|X3eaPrAgHJKSRtU1DQ23FRWoYK1o9xmgArj1rACce6ab85e1
