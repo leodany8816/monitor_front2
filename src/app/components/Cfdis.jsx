@@ -52,9 +52,9 @@ const Facturas = () => {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
-
-                if (res.json().length > 0) {
-                    const data = await res.json();
+                const data = await res.json();
+                if (data.cfdis.length > 0) {
+                    // const data = await res.json();
                     setCfdis(data.cfdis);
                     setFilteredCfdis(data.cfdis);
                 }
