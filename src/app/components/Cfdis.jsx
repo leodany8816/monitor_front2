@@ -40,67 +40,89 @@ const Facturas = () => {
     });
 
 
+    const fetchCfdis = async () => {
+        setLoading(true);
+        try {
+            // const res = await fetch("http://127.0.0.1:8000/api/cfdi", {
+            const res = await fetch("https://apis.grupo-citi.com/api/cfdi", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const data = await res.json();
+            if (data.cfdis.length > 0) {
+                // const data = await res.json();
+                setCfdis(data.cfdis);
+                setFilteredCfdis(data.cfdis);
+            }
+        } catch (err) {
+            showError('Error en la conexión: ' + err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchCfdis = async () => {
-            setLoading(true);
+        fetchCfdis();
+    }, []);
+
+
+    // Función para aplicar el filtro de rango de fechas
+    const applyDateFilter = () => {
+        console.log('filtro fechas')
+        setLoading(true);
+        setShowWarning(false);
+
+        setTimeout(async () => {
+            if (!startDate || !endDate) {
+                showError('Error: Tienes que seleccionar un rango de fecha');
+                setLoading(false);
+                return;
+            }
+
+            if (new Date(startDate) > new Date(endDate)) {
+                showError('Error: La fecha inicial no puede ser posterior a la final.');
+                setLoading(false);
+                return;
+            }
+
             try {
-                // const res = await fetch("http://127.0.0.1:8000/api/cfdi", {
-                const res = await fetch("https://apis.grupo-citi.com/api/cfdi", {
+                const res = await fetch("https://apis.grupo-citi.com/api/search", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
+                    body: JSON.stringify({
+                        fechaInicio: startDate,
+                        fechaFin: endDate
+                    }),
                 });
+
                 const data = await res.json();
-                if (data.cfdis.length > 0) {
-                    // const data = await res.json();
+
+                if (data.cfdis?.length > 0) {
                     setCfdis(data.cfdis);
                     setFilteredCfdis(data.cfdis);
+                } else {
+                    showError("No se encontraron resultados en ese rango.");
                 }
-            } catch (err) {
-                showError('Error en la conexión: ' + err);
+            } catch (error) {
+                console.log(error);
+                showError("Error al conectar con la API.");
             } finally {
                 setLoading(false);
             }
-        };
-        fetchCfdis();
-
-    }, []);
-
-    // Función para aplicar el filtro de rango de fechas
-    const applyDateFilter = () => {
-        setLoading(true);
-        setShowWarning(false);
-        setTimeout(() => {
-            if (startDate && endDate) {
-                if (startDate < endDate) {
-                    const filteredData = cfdis.filter(cfdi => {
-                        const cfdiDate = new Date(cfdi.fechaEmision.split('-').reverse().join('-')); // Convertir la fecha
-                        // const cfdiDate = new Date(cfdi.fechaEmision); // Convertir la fecha
-                        //console.log('fechas ' + cfdiDate);
-                        return cfdiDate >= startDate && cfdiDate <= endDate;
-
-                    });
-                    setFilteredCfdis(filteredData);
-                    setLoading(false);
-                } else {
-                    //console.log('error');
-                    setLoading(false);
-                    showError('Error: No se puede seleccionar una fecha inicial posterior a la final.');
-                }
-            } else {
-                showError('Erro: Tienes que seleccionar un rango de fecha');
-
-            }
-            setLoading(false);
         }, 100);
     };
+
     // Función para limpiar el filtro
     const clearDateFilter = () => {
         setStartDate(null);
         setEndDate(null);
-        setFilteredCfdis(cfdis); // Restablece los datos originales
+        fetchCfdis();
     };
 
     const Columns = [
